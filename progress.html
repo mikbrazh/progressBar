@@ -6,83 +6,97 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
-    #myProgress {
-        width: 100%;
-        background-color: lightgrey;
-    }
+        .quiz-progress-bar {
+            width: 100%;
+        }
+        
+        .quiz-progress-bar__value {
+            padding: 0 20px;
+        }
 
-    #myBar {
-        width: 10%;
-        height: 30px;
-        background-color: tomato;
-        text-align: center;
-        line-height: 30px;
-        color: white;
-    }
+        .quiz-progress-bar__bar {
+            background-color: lightgrey;
+        }
+
+        .quiz-progress-bar__progress {
+            width: 0%;
+            height: 30px;
+            background-color: tomato;
+            text-align: center;
+            line-height: 30px;
+            color: white;
+        }
     </style>
 </head>
 
 <body>
     <h1>JavaScript Progress Bar</h1>
-    <div id="myProgress">
-        <div id="myBar">10%</div>
+    <div class="quiz-progress-bar">
+        <div class="quiz-progress-bar__value">0%</div>
+        <div class="quiz-progress-bar__bar">
+            <div class="quiz-progress-bar__progress"></div>
+        </div>
     </div>
     <br>
+
+
     <button onclick="move()">Запустить</button>
+
+
     <script>
-    // var i = 0;
-
-    // let obj = [{
-    //     number: 1,
-    // },
-    // {
-    //     number: 2,
-    // },
-    // {
-    //     number: 3,
-    // },
-    //     {
-    //     number: 4,
-    // },
-    //     {
-    //     number: 5,
-    // }, ]
+        const quizData = [{
+            number: 1,
+        },
+        {
+            number: 2,
+        },
+        {
+            number: 3,
+        },
+        {
+            number: 4,
+        },
+        {
+            number: 5,
+        },]
 
 
-    // function getStopPoint() {
-    // 	let = questionsNumber = obj[obj.length - 1].number;
+        // function getStopPoint() {
+        // 	let = questionsNumber = quizData[quizData.length - 1].number;
 
-    // 	let stopPoint = 100 / questionsNumber;
+        // 	let stopPoint = 100 / questionsNumber;
 
-    // 	return stopPoint;
-    // }
+        // 	return stopPoint;
+        // }
 
-    // console.log(getStopPoint());
-    	let state = 30;
+        // console.log(getStopPoint());
+        let state = 30;
 
-    function move() {
+        function move() {
 
-    	console.log(state);
-        // if (i == 0) {
-            // i = 1;
-            var elem = document.getElementById("myBar");
+            // console.log(state);
+            var elem = document.querySelector(".quiz-progress-bar__value");
+            var elem2 = document.querySelector(".quiz-progress-bar__progress");
             var width = 10;
             var id = setInterval(frame, 10);
 
             function frame() {
                 if (width >= 100) {
                     clearInterval(id);
-                    // i = 0;
                 } else {
-                    width =+ state;
-                    elem.style.width = width + "%";
-                    elem.innerHTML = width + "%";
 
-                }
+                    // if ()
+                    width = + state;
+                    // width++;
+                    elem.innerHTML = width + "%";
+                    elem2.style.width = width + "%";
+                    console.log(width);
+
+                // }
             }
-                    state = state + 1;
+            state = state + 1;
+            
         }
-    // }
     </script>
 </body>
 
