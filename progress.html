@@ -9,17 +9,13 @@
         .quiz-progress-bar {
             width: 100%;
         }
-        
-        .quiz-progress-bar__value {
-            padding: 0 20px;
-        }
 
         .quiz-progress-bar__bar {
             background-color: lightgrey;
         }
 
         .quiz-progress-bar__progress {
-            width: 0%;
+            width: 0;
             height: 30px;
             background-color: tomato;
             text-align: center;
@@ -34,13 +30,13 @@
     <div class="quiz-progress-bar">
         <div class="quiz-progress-bar__value">0%</div>
         <div class="quiz-progress-bar__bar">
-            <div class="quiz-progress-bar__progress"></div>
+            <div class="quiz-progress-bar__progress">0%</div>
         </div>
     </div>
     <br>
 
 
-    <button onclick="move()">Запустить</button>
+    <button onclick="moveProgress()">Запустить</button>
 
 
     <script>
@@ -60,42 +56,40 @@
             number: 5,
         },]
 
+        let width = 0;
+        const initialStep = getStep();
+        let step = getStep();
 
-        // function getStopPoint() {
-        // 	let = questionsNumber = quizData[quizData.length - 1].number;
+        console.log('initial step: ' + step);
 
-        // 	let stopPoint = 100 / questionsNumber;
+        function moveProgress() {
+            const $el__value = document.querySelector(".quiz-progress-bar__value");
+            const $el__progress = document.querySelector(".quiz-progress-bar__progress");
 
-        // 	return stopPoint;
-        // }
+            const interval = setInterval(moveFrame, 15);
 
-        // console.log(getStopPoint());
-        let state = 30;
+            console.log('width: ' + width);
+            console.log('step: ' + step);
 
-        function move() {
-
-            // console.log(state);
-            var elem = document.querySelector(".quiz-progress-bar__value");
-            var elem2 = document.querySelector(".quiz-progress-bar__progress");
-            var width = 10;
-            var id = setInterval(frame, 10);
-
-            function frame() {
-                if (width >= 100) {
-                    clearInterval(id);
+            function moveFrame() {
+                if (width >= step || width >= 100) {
+                    clearInterval(interval);
+                    width = width;
+                    step += initialStep;
                 } else {
-
-                    // if ()
-                    width = + state;
-                    // width++;
-                    elem.innerHTML = width + "%";
-                    elem2.style.width = width + "%";
-                    console.log(width);
-
-                // }
+                    width++;
+                    $el__value.innerHTML = width + "%";
+                    $el__progress.innerHTML = width + "%";
+                    $el__progress.style.width = width + "%";
+                }
             }
-            state = state + 1;
-            
+        }
+
+        function getStep() {
+            let = numberOfQuestions = quizData[quizData.length - 1].number;
+            let percent = Math.ceil(100 / 3);
+
+            return percent;
         }
     </script>
 </body>
