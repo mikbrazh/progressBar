@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Counter test</title>
+
+    <style>
+        .quiz-progress-bar {
+            width: 100%;
+        }
+
+        .quiz-progress-bar__bar {
+            background-color: lightgrey;
+        }
+
+        .quiz-progress-bar__progress {
+            width: 0;
+            height: 30px;
+            background-color: tomato;
+            text-align: center;
+            line-height: 30px;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <button class="btn" onclick="progressBar.reduceProgress()">&#8592; Назад</button>
+    <button class="btn" onclick="progressBar.increaseProgress()">Вперед &#8594;</button>
+
+<script>
+
+    const quizData = [{
+            number: 1,
+        },
+        {
+            number: 2,
+        },
+        {
+            number: 3,
+        },
+        {
+            number: 4,
+        },
+        {
+            number: 5,
+        },
+        {
+            number: 6,
+        },
+        {
+            number: 7,
+        },
+    ];
+
+    class ProgressBar {
+        constructor(initialValue) {
+            
+
+            // Берем свойство number у последнего элемента массива
+            this.numberOfQuestions = quizData[quizData.length - 1].number;
+            console.log(this.numberOfQuestions);
+            // Узнаем сколько процентов от общего колличества вопросов занимает один вопрос
+            this.percentOfOneQuestion = Math.ceil(100 / this.numberOfQuestions);
+            console.log(this.percentOfOneQuestion);
+
+            this.value = this.percentOfOneQuestion;
+
+            this.init();
+        }
+
+        init() {
+            const $__quizProgressBar = document.createElement('div');
+            $__quizProgressBar.classList.add('quiz-progress-bar');
+            $__quizProgressBar.innerHTML = `
+                <div class="quiz-progress-bar__value">0%</div>
+                    <div class="quiz-progress-bar__bar">
+                    <div class="quiz-progress-bar__progress">0%</div>
+                </div>
+            `
+            document.body.appendChild($__quizProgressBar);
+
+
+
+
+        }
+
+        increaseProgress() {
+            if (this.value < 100) {
+                console.log(this.value);
+
+                // // Берем свойство number у последнего элемента массива
+                // const numberOfQuestions = quizData[quizData.length - 1].number;
+                // console.log(numberOfQuestions);
+                // // Узнаем сколько процентов от общего колличества вопросов занимает один вопрос
+                // const percentOfOneQuestion = Math.ceil(100 / numberOfQuestions);
+                // console.log(percentOfOneQuestion);
+
+                const $__quizProgressBarValue = document.querySelector('.quiz-progress-bar__value');
+                const $__quizProgressBarProgress = document.querySelector('.quiz-progress-bar__progress');
+                console.log($__quizProgressBarProgress);
+                $__quizProgressBarValue.textContent = `${this.value}%`;
+                $__quizProgressBarProgress.textContent = `${this.value}%`;
+                $__quizProgressBarProgress.style.width = `${this.value}%`;
+                // this.value += percentOfOneQuestion;
+                this.value += this.percentOfOneQuestion;
+            }
+            else if (this.value >= 100) {
+                const $__quizProgressBarValue = document.querySelector('.quiz-progress-bar__value');
+                const $__quizProgressBarProgress = document.querySelector('.quiz-progress-bar__progress');
+                $__quizProgressBarValue.textContent = 100 + '%';
+                $__quizProgressBarProgress.textContent = 100 + '%';
+                $__quizProgressBarProgress.style.width = 100 + '%';
+
+                return
+            }
+            else {
+                return;
+            }
+        }
+
+        reduceProgress() {
+            if (this.value > 0) {
+                console.log(this.value);
+
+                // Берем свойство number у последнего элемента массива
+                const numberOfQuestions = quizData[quizData.length - 1].number;
+                console.log(numberOfQuestions);
+                // Узнаем сколько процентов от общего колличества вопросов занимает один вопрос
+                const percentOfOneQuestion = Math.ceil(100 / numberOfQuestions);
+                console.log(percentOfOneQuestion);
+
+                const $__quizProgressBarValue = document.querySelector('.quiz-progress-bar__value');
+                const $__quizProgressBarProgress = document.querySelector('.quiz-progress-bar__progress');
+                console.log($__quizProgressBarProgress);
+                $__quizProgressBarValue.textContent = `${this.value}%`;
+                $__quizProgressBarProgress.textContent = `${this.value}%`;
+                $__quizProgressBarProgress.style.width = `${this.value}%`;
+                // this.value -= percentOfOneQuestion;
+                this.value -= this.percentOfOneQuestion;
+            }
+            else if (this.value <= 0) {
+                const $__quizProgressBarValue = document.querySelector('.quiz-progress-bar__value');
+                const $__quizProgressBarProgress = document.querySelector('.quiz-progress-bar__progress');
+                $__quizProgressBarValue.textContent = 0 + '%';
+                $__quizProgressBarProgress.textContent = 0 + '%';
+                $__quizProgressBarProgress.style.width = 0 + '%';
+
+                return
+            }
+            else {
+                return;
+            }
+        }
+    }
+
+    const progressBar = new ProgressBar(0);
+
+    // progressBar.increaseProgress();
+
+</script>
+</body>
+</html>
