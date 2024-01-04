@@ -1,0 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+.quiz {
+    border: 1px solid #000;
+    width: 600px;
+    min-height: 100px;
+    margin: 0 auto;
+    padding: 30px;
+    font-family: 'Roboto', sans-serif;
+}
+
+.quiz__questions {
+    text-align: center;
+/*  margin-bottom: 20px;*/
+}
+
+.quiz-question__title {
+    font-size: 25px;
+    margin-bottom: 10px;
+}
+
+.quiz-question__answers {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start
+}
+
+.quiz-question__label {
+    margin-bottom: 10px;
+}
+
+.quiz-question__answers input[type="text"] {
+    width: 200px;
+    height: 40px;
+    padding-left: 10px;
+}
+
+.quiz-question button {
+    color: #fff;
+    background-color: #000;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+}
+
+.error {
+    outline: 3px solid red !important;
+}
+
+/*quiz-progress-bar styles START*/
+.quiz-progress-bar {
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.quiz-progress-bar__bar {
+    background-color: lightgrey;
+}
+
+.quiz-progress-bar__progress {
+    width: 0;
+    height: 20px;
+    background-color: tomato;
+    text-align: center;
+    line-height: 20px;
+    color: white;
+}
+/*quiz-progress-bar styles END*/
