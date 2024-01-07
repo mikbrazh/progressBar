@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
-.quiz {
+/* ======= quiz-wrapper START ======= */
+.quiz-wrapper  {
     border: 1px solid #000;
     width: 600px;
     min-height: 100px;
@@ -8,6 +9,16 @@
     padding: 30px;
     font-family: 'Roboto', sans-serif;
 }
+/* ======= quiz-wrapper END ======= */
+
+/* .quiz {
+    border: 1px solid #000;
+    width: 600px;
+    min-height: 100px;
+    margin: 0 auto;
+    padding: 30px;
+    font-family: 'Roboto', sans-serif;
+} */
 
 .quiz__questions {
     text-align: center;
@@ -47,14 +58,16 @@
     outline: 3px solid red !important;
 }
 
-/*quiz-progress-bar styles START*/
+/* ======= quiz-progress-bar START ======= */
 .quiz-progress-bar {
     margin-bottom: 10px;
     width: 100%;
 }
 
 .quiz-progress-bar__bar {
+    margin-bottom: 10px;
     background-color: lightgrey;
+    border-radius: 20px;
 }
 
 .quiz-progress-bar__progress {
@@ -64,5 +77,6 @@
     text-align: center;
     line-height: 20px;
     color: white;
+    border-radius: 20px;
 }
-/*quiz-progress-bar styles END*/
+/* ======= quiz-progress-bar END ======= */

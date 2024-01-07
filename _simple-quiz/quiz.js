@@ -1,55 +1,75 @@
+/* ======= quizData START ======= */
 const quizData = [{
-    number: 1,
-    title: "На какую сумму вы рассчитываете?",
-    answer_alias: "money",
-    answers: [{
-        answer_title: "500 рублей",
-        type: "checkbox"
-      },
-      {
-        answer_title: "5000 рублей",
-        type: "checkbox"
-      },
-      {
-        answer_title: "Введу текстом",
-        type: "text"
-      }
-    ]
+  number: 1,
+  title: "На какую сумму вы рассчитываете?",
+  answer_alias: "money",
+  answers: [{
+    answer_title: "500 рублей",
+    type: "checkbox"
   },
   {
-    number: 2,
-    title: "Какой именно вам нужен сайт?",
-    answer_alias: "great",
-    answers: [{
-        answer_title: "Лендинг-пейдж",
-        type: "radio"
-      },
-      {
-        answer_title: "Корпоративный сайт",
-        type: "radio"
-      },
-      {
-        answer_title: "Интернет-магазин",
-        type: "radio"
-      }
-    ]
+    answer_title: "5000 рублей",
+    type: "checkbox"
   },
   {
-    number: 3,
-    title: "Оставьте свой телефон, мы вам перезвоним",
-    answer_alias: "phone",
-    answers: [{
-      answer_title: "Введите телефон",
-      type: "text"
-    },
-    ]
+    answer_title: "Введу текстом",
+    type: "text"
   }
+  ]
+},
+{
+  number: 2,
+  title: "Какой именно вам нужен сайт?",
+  answer_alias: "great",
+  answers: [{
+    answer_title: "Лендинг-пейдж",
+    type: "radio"
+  },
+  {
+    answer_title: "Корпоративный сайт",
+    type: "radio"
+  },
+  {
+    answer_title: "Интернет-магазин",
+    type: "radio"
+  }
+  ]
+},
+{
+  number: 3,
+  title: "Еще один вопрос",
+  answer_alias: "another",
+  answers: [{
+    answer_title: "Вопрос 1",
+    type: "radio"
+  },
+  {
+    answer_title: "Вопрос 2",
+    type: "radio"
+  },
+  {
+    answer_title: "Вопрос 3",
+    type: "radio"
+  },
+  ]
+},
+{
+  number: 4,
+  title: "Оставьте свой телефон, мы вам перезвоним",
+  answer_alias: "phone",
+  answers: [{
+    answer_title: "Введите телефон",
+    type: "text"
+  },
+  ]
+}
 ];
+/* ======= quizData END ======= */
 
-
+/* ======= quizTemplate START ======= */
 const quizTemplate = (data = [], dataLength = 0, options) => {
-  const {number, title} = data;
-  const {nextBtnText} = options;
+  const { number, title } = data;
+  const { nextBtnText } = options;
   const answers = data.answers.map(item => {
     return `
       <label class="quiz-question__label">
@@ -62,14 +82,6 @@ const quizTemplate = (data = [], dataLength = 0, options) => {
   return `
     <div class="quiz__content">
       <div class="quiz__questions">${number} из ${dataLength}</div>
-
-      <div class="quiz-progress-bar">
-        <div class="quiz-progress-bar__value"></div>
-            <div class="quiz-progress-bar__bar">
-            <div class="quiz-progress-bar__progress"></div>
-        </div>
-      </div>
-
       <div class="quiz-question">
         <h3 class="quiz-question__title">${title}</h3>
         <div class="quiz-question__answers">
@@ -80,7 +92,9 @@ const quizTemplate = (data = [], dataLength = 0, options) => {
     </div>
   `
 };
+/* ======= quizTemplate END ======= */
 
+/* ======= class Quiz START ======= */
 class Quiz {
   constructor(selector, data, options) {
     this.$el = document.querySelector(selector);
@@ -93,7 +107,7 @@ class Quiz {
     this.init()
     this.events()
   }
-  
+
   init() {
     console.log('init!');
     this.$el.innerHTML = quizTemplate(this.data[this.counter], this.dataLength, this.options);
@@ -103,7 +117,7 @@ class Quiz {
     console.log('next question!');
 
     if (this.valid()) {
-    
+
       if (this.counter + 1 < this.dataLength) {
         this.counter++;
         this.$el.innerHTML = quizTemplate(this.data[this.counter], this.dataLength, this.options);
@@ -154,7 +168,7 @@ class Quiz {
     let isValid = false;
     let elements = this.$el.querySelectorAll('input')
     elements.forEach(el => {
-      switch(el.nodeName) {
+      switch (el.nodeName) {
         case 'INPUT':
           switch (el.type) {
             case 'text':
@@ -210,7 +224,7 @@ class Quiz {
       let len = form.elements.length;
       for (let i = 0; i < len; i++) {
         field = form.elements[i];
-        
+
         if (field.name && !field.disabled && field.type != 'file' && field.type != 'reset' && field.type != 'submit' && field.type != 'button') {
           if (field.type == 'select-multiple') {
             for (j = form.elements[i].options.length - 1; j >= 0; j--) {
@@ -219,10 +233,8 @@ class Quiz {
             }
           } else if ((field.type != 'checkbox' && field.type != 'radio' && field.value) || field.checked) {
             valueString += field.value + ',';
-            
+
             s[field.name] = valueString;
-            
-            
           }
         }
       }
@@ -230,107 +242,110 @@ class Quiz {
     return s
   }
 }
+/* ======= class Quiz END ======= */
 
+/* ======= class ProgressBar START ======= */
 class ProgressBar {
-    constructor(target, options) {
-        // Берем свойство number у последнего элемента массива
-        options.reducedQuestionsNumber ? this.numberOfQuestions = quizData[quizData.length - 1].number - 1 : this.numberOfQuestions = quizData[quizData.length - 1].number;
-        // Узнаем сколько процентов от общего колличества вопросов занимает один вопрос
-        this.percentOfOneQuestion = Math.ceil(100 / this.numberOfQuestions);
-        options.notZeroStart ? this.value = this.percentOfOneQuestion : this.value = 0; // ОПИСАТЬ
+  constructor(target, options) {
+    // Берем свойство number у последнего элемента массива
+    options.reducedQuestionsNumber ? this.numberOfQuestions = quizData[quizData.length - 1].number - 1 : this.numberOfQuestions = quizData[quizData.length - 1].number;
+    // Узнаем сколько процентов от общего колличества вопросов занимает один вопрос
+    this.percentOfOneQuestion = Math.ceil(100 / this.numberOfQuestions);
+    options.notZeroStart ? this.value = this.percentOfOneQuestion : this.value = 0; // ОПИСАТЬ
 
-        this.target = target;
-        this.btnPrev = options.btnPrev;
-        this.btnNext = options.btnNext;
+    this.target = target;
+    this.btnPrev = options.btnPrev;
+    this.btnNext = options.btnNext;
 
-        this.init();
+    this.init();
+  }
+
+  init() {
+    const $__target = document.querySelector(this.target);
+    const $__quizProgressBar = `
+                <div class="quiz-progress-bar__value">${this.value}%</div>
+                    <div class="quiz-progress-bar__bar">
+                    <div class="quiz-progress-bar__progress">${this.value}%</div>
+                </div>
+            `;
+    $__target.insertAdjacentHTML('afterbegin', $__quizProgressBar);
+
+    const $__quizProgressBarProgress = document.querySelector('.quiz-progress-bar__progress');
+    $__quizProgressBarProgress.textContent = this.value + '%';
+    $__quizProgressBarProgress.style.width = `${this.value}%`;
+
+    const $__quizProgressBarValue = document.querySelector('.quiz-progress-bar__value');
+    $__quizProgressBarValue.textContent = this.value + '%';
+
+    console.log('>>> ProgressBar init!');
+  }
+
+  increaseProgress() {
+    if (this.value < 100) {
+
+      let value = this.value;
+      this.value += this.percentOfOneQuestion;
+
+      const interval = setInterval(moveFrame.bind(progressBar), 15);
+
+      function moveFrame() {
+
+        if (value <= this.value && value <= 100) {
+
+          console.log(value);
+
+          const $__quizProgressBarValue = document.querySelector('.quiz-progress-bar__value');
+          const $__quizProgressBarProgress = document.querySelector('.quiz-progress-bar__progress');
+          $__quizProgressBarValue.textContent = `${value}%`;
+          $__quizProgressBarProgress.textContent = `${value}%`;
+          $__quizProgressBarProgress.style.width = `${value}%`;
+
+          value++;
+        }
+      }
     }
-
-    init() {
-        const $__quizProgressBarProgress = document.querySelector('.quiz-progress-bar__progress');
-        $__quizProgressBarProgress.textContent = this.value + '%';
-        $__quizProgressBarProgress.style.width = `${this.value}%`;
-
-        const $__quizProgressBarValue = document.querySelector('.quiz-progress-bar__value');
-        $__quizProgressBarValue.textContent = this.value + '%';
+    else {
+      return;
     }
+    console.log('>>> increaseProgress done!');
+  }
 
-    increaseProgress() {
-        if (this.value < 100) {
+  reduceProgress() {
+    if (this.value > this.percentOfOneQuestion) {
 
+      this.value -= this.percentOfOneQuestion;
 
-            let qwe = this.value;
-            this.value += this.percentOfOneQuestion;
-
-            if (this.value >= 100) {
-                const $__quizProgressBarValue = document.querySelector('.quiz-progress-bar__value');
-                const $__quizProgressBarProgress = document.querySelector('.quiz-progress-bar__progress');
-                $__quizProgressBarValue.textContent = 100 + '%';
-                $__quizProgressBarProgress.textContent = 100 + '%';
-                $__quizProgressBarProgress.style.width = 100 + '%';
-            } else {
-                // const $__quizProgressBarValue = document.querySelector('.quiz-progress-bar__value');
-                // const $__quizProgressBarProgress = document.querySelector('.quiz-progress-bar__progress');
-                // $__quizProgressBarValue.textContent = `${this.value}%`;
-                // $__quizProgressBarProgress.textContent = `${this.value}%`;
-                // $__quizProgressBarProgress.style.width = `${this.value}%`;
-
-                const interval = setInterval(moveFrame.bind(progressBar), 15);
-
-                function moveFrame() {
-
-                    if (qwe <= this.value) {
-                        
-                        console.log(qwe);
-
-                        const $__quizProgressBarValue = document.querySelector('.quiz-progress-bar__value');
-                        const $__quizProgressBarProgress = document.querySelector('.quiz-progress-bar__progress');
-                        $__quizProgressBarValue.textContent = `${qwe}%`;
-                        $__quizProgressBarProgress.textContent = `${qwe}%`;
-                        $__quizProgressBarProgress.style.width = `${qwe}%`;
-
-                        qwe++;
-                    }
-                }
-            }
-        }
-        else {
-            return;
-        }
+      const $__quizProgressBarValue = document.querySelector('.quiz-progress-bar__value');
+      const $__quizProgressBarProgress = document.querySelector('.quiz-progress-bar__progress');
+      $__quizProgressBarValue.textContent = `${this.value}%`;
+      $__quizProgressBarProgress.textContent = `${this.value}%`;
+      $__quizProgressBarProgress.style.width = `${this.value}%`;
     }
+    else if (this.value <= 0) {
+      const $__quizProgressBarValue = document.querySelector('.quiz-progress-bar__value');
+      const $__quizProgressBarProgress = document.querySelector('.quiz-progress-bar__progress');
+      $__quizProgressBarValue.textContent = 0 + '%';
+      $__quizProgressBarProgress.textContent = 0 + '%';
+      $__quizProgressBarProgress.style.width = 0 + '%';
 
-    reduceProgress() {
-        if (this.value > this.percentOfOneQuestion) {
-
-            this.value -= this.percentOfOneQuestion;
-
-            const $__quizProgressBarValue = document.querySelector('.quiz-progress-bar__value');
-            const $__quizProgressBarProgress = document.querySelector('.quiz-progress-bar__progress');
-            $__quizProgressBarValue.textContent = `${this.value}%`;
-            $__quizProgressBarProgress.textContent = `${this.value}%`;
-            $__quizProgressBarProgress.style.width = `${this.value}%`;
-        }
-        else if (this.value <= 0) {
-            const $__quizProgressBarValue = document.querySelector('.quiz-progress-bar__value');
-            const $__quizProgressBarProgress = document.querySelector('.quiz-progress-bar__progress');
-            $__quizProgressBarValue.textContent = 0 + '%';
-            $__quizProgressBarProgress.textContent = 0 + '%';
-            $__quizProgressBarProgress.style.width = 0 + '%';
-
-            return
-        }
-        else {
-            return;
-        }
+      return
     }
+    else {
+      return;
+    }
+    console.log('>>> reduceProgress done!');
+  }
 }
+/* ======= class ProgressBar END ======= */
 
+/* ======= Instances of classes START ======= */
 window.quiz = new Quiz('.quiz', quizData, {
   nextBtnText: "Далее",
   sendBtnText: "Отправить",
 });
 
-const progressBar = new ProgressBar('.quiz', {
-    // notZeroStart: true,
-    reducedQuestionsNumber: true,
+const progressBar = new ProgressBar('.quiz-wrapper', {
+  // notZeroStart: true,
+  // reducedQuestionsNumber: true,
 });
+/* ======= Instances of classes END ======= */
