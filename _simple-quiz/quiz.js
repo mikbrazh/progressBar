@@ -247,28 +247,36 @@ class Quiz {
 /* ======= class ProgressBar START ======= */
 class ProgressBar {
   constructor(target, options) {
-    if (options.zeroStart !== false) this.zeroStart = true;
-    (options.zeroStart == false && options.completeEnd == true) ? this.completeEnd = false : this.completeEnd = options.completeEnd;
+    this.target = target;
+    this.targetElem = document.querySelector(this.target);
+
+    (options.zeroStart === false || options.zeroStart === 0) ?
+      this.zeroStart = false :
+      this.zeroStart = true;
+
+    (options.smoothProgress === true || options.smoothProgress === 1 || options.smoothProgress === undefined) ?
+      this.smoothProgress = true :
+      this.smoothProgress = false;
+
+    (options.completeEnd === true || options.completeEnd === 1) ?
+      this.completeEnd = true :
+      this.completeEnd = false;
+
+    if (this.zeroStart === false) this.completeEnd = false;
 
     // The number property from the last element of the array
     this.completeEnd ? this.numberOfQuestions = quizData[quizData.length - 1].number - 1 : this.numberOfQuestions = quizData[quizData.length - 1].number;
 
     // How many percent of the total number of questions is one question
     this.percentOfOneQuestion = Math.ceil(100 / this.numberOfQuestions);
-
     this.zeroStart ? this.value = 0 : this.value = this.percentOfOneQuestion;
-
-    this.target = target;
-
-    this.targetElem = document.querySelector(this.target);
-
-    (options.smoothProgress === true || options.smoothProgress === 1 || options.smoothProgress === undefined) ? this.smoothProgress = true : this.smoothProgress = false;
 
     this.init();
   }
 
   init() {
-    const quizProgressBarHTML = `
+    if (this.targetElem) {
+      const quizProgressBarHTML = `
       <div class="quiz-progress-bar">
         <div class="quiz-progress-bar__value">${this.value}%</div>
         <div class="quiz-progress-bar__bar">
@@ -279,18 +287,22 @@ class ProgressBar {
       </div>
     `;
 
-    this.targetElem.insertAdjacentHTML('afterbegin', quizProgressBarHTML);
+      this.targetElem.insertAdjacentHTML('afterbegin', quizProgressBarHTML);
 
-    const $__quizProgressBarValue = this.targetElem.querySelector('.quiz-progress-bar__value');
-    $__quizProgressBarValue.textContent = this.value + '%';
+      const $__quizProgressBarValue = this.targetElem.querySelector('.quiz-progress-bar__value');
+      $__quizProgressBarValue.textContent = this.value + '%';
 
-    const $__quizProgressBarProgress = this.targetElem.querySelector('.quiz-progress-bar__progress');
-    $__quizProgressBarProgress.style.width = `${this.value}%`;
+      const $__quizProgressBarProgress = this.targetElem.querySelector('.quiz-progress-bar__progress');
+      $__quizProgressBarProgress.style.width = `${this.value}%`;
 
-    const $__quizProgressBarProgressValue = this.targetElem.querySelector('.quiz-progress-bar__progress-value');
-    $__quizProgressBarProgressValue.textContent = this.value + '%';
+      const $__quizProgressBarProgressValue = this.targetElem.querySelector('.quiz-progress-bar__progress-value');
+      $__quizProgressBarProgressValue.textContent = this.value + '%';
 
-    console.log('class ProgressBar -> init() => init!');
+      console.log('class ProgressBar -> init() => init!');
+    } else {
+      console.log(`class ProgressBar -> init() => Couldn't find target element ${this.target}!`);
+      this.increaseProgress = () => { return };
+    }
   }
 
   increaseProgress() {
