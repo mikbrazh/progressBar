@@ -96,7 +96,7 @@ const quizTemplate = (data = [], dataLength = 0, options) => {
 
 /* ======= class Quiz START ======= */
 class Quiz {
-  constructor(selector, progressBarSelector, data, options, progressBarOptions) {
+  constructor(selector, data, options) {
     this.$el = document.querySelector(selector);
     this.options = options;
     this.data = data;
@@ -104,122 +104,14 @@ class Quiz {
     this.dataLength = this.data.length;
     this.resultArray = [];
     this.tmp = {};
-
-    /* ======= Progress bar START ======= */
-    this.progressBarSelector = progressBarSelector;
-    this.progressBarSelectorElem = document.querySelector(this.progressBarSelector);
-
-    (progressBarOptions.zeroStart === false || progressBarOptions.zeroStart === 0) ?
-      this.zeroStart = false :
-      this.zeroStart = true;
-
-    (progressBarOptions.smoothProgress === true || progressBarOptions.smoothProgress === 1 || progressBarOptions.smoothProgress === undefined) ?
-      this.smoothProgress = true :
-      this.smoothProgress = false;
-
-    (progressBarOptions.completeEnd === true || progressBarOptions.completeEnd === 1) ?
-      this.completeEnd = true :
-      this.completeEnd = false;
-
-    if (this.zeroStart === false) this.completeEnd = false;
-
-    // The number property from the last element of the array
-    this.completeEnd ? this.numberOfQuestions = quizData[quizData.length - 1].number - 1 : this.numberOfQuestions = quizData[quizData.length - 1].number;
-
-    // How many percent of the total number of questions is one question
-    this.percentOfOneQuestion = Math.ceil(100 / this.numberOfQuestions);
-    this.zeroStart ? this.value = 0 : this.value = this.percentOfOneQuestion;
-    /* ======= Progress bar END ======= */
-
     this.init()
     this.events()
-
-    /* ======= Progress bar START ======= */
-    this.progressBarInit();
-    /* ======= Progress bar END ======= */
   }
 
   init() {
     console.log('init!');
     this.$el.innerHTML = quizTemplate(this.data[this.counter], this.dataLength, this.options);
   }
-
-  /* ======= Progress bar START ======= */
-  progressBarInit() {
-    if (this.progressBarSelectorElem) {
-      const quizProgressBarHTML = `
-      <div class="quiz-progress-bar">
-        <div class="quiz-progress-bar__value">${this.value}%</div>
-        <div class="quiz-progress-bar__bar">
-          <div class="quiz-progress-bar__progress">
-            <span class="quiz-progress-bar__progress-value">${this.value}%</span>
-          </div>
-        </div>
-      </div>
-    `;
-
-      this.progressBarSelectorElem.insertAdjacentHTML('afterbegin', quizProgressBarHTML);
-
-      const $__quizProgressBarValue = this.progressBarSelectorElem.querySelector('.quiz-progress-bar__value');
-      $__quizProgressBarValue.textContent = this.value + '%';
-
-      const $__quizProgressBarProgress = this.progressBarSelectorElem.querySelector('.quiz-progress-bar__progress');
-      $__quizProgressBarProgress.style.width = `${this.value}%`;
-
-      const $__quizProgressBarProgressValue = this.progressBarSelectorElem.querySelector('.quiz-progress-bar__progress-value');
-      $__quizProgressBarProgressValue.textContent = this.value + '%';
-
-      console.log('class ProgressBar -> init() => init!');
-    } else {
-      console.log(`class ProgressBar -> init() => Couldn't find progressBarSelector element ${this.progressBarSelector}!`);
-      this.increaseProgress = () => { return };
-    }
-  }
-
-  increaseProgress() {
-    if (this.smoothProgress) {
-      if (this.value < 100) {
-        let value = this.value;
-        this.value += this.percentOfOneQuestion;
-
-        const interval = setInterval(smoothProgress.bind(this), 15);
-
-        function smoothProgress() {
-          if (value <= this.value && value <= 100) {
-            console.log(`class ProgressBar -> increaseProgress() => ${value}`);
-
-            const $__quizProgressBarValue = this.progressBarSelectorElem.querySelector('.quiz-progress-bar__value');
-            $__quizProgressBarValue.textContent = `${value}%`;
-
-            const $__quizProgressBarProgress = this.progressBarSelectorElem.querySelector('.quiz-progress-bar__progress');
-            $__quizProgressBarProgress.style.width = `${value}%`;
-
-            const $__quizProgressBarProgressValue = this.progressBarSelectorElem.querySelector('.quiz-progress-bar__progress-value');
-            $__quizProgressBarProgressValue.textContent = `${value}%`;
-
-            value++;
-          }
-        }
-      }
-      else {
-        return;
-      }
-    } else {
-      this.value += this.percentOfOneQuestion;
-
-      console.log(`class ProgressBar -> increaseProgress() => ${this.value}`);
-
-      const $__quizProgressBarValue = this.progressBarSelectorElem.querySelector('.quiz-progress-bar__value');
-      $__quizProgressBarValue.textContent = `${this.value}%`;
-
-      const $__quizProgressBarProgress = this.progressBarSelectorElem.querySelector('.quiz-progress-bar__progress');
-      $__quizProgressBarProgress.style.width = `${this.value}%`;
-
-      const $__quizProgressBarProgressValue = this.progressBarSelectorElem.querySelector('.quiz-progress-bar__progress-value');
-      $__quizProgressBarProgressValue.textContent = `${this.value}%`;
-    }
-  }
-  /* ======= Progress bar END ======= */
 
   nextQuestion() {
     console.log('next question!');
@@ -238,7 +130,7 @@ class Quiz {
         console.log('А все! конец!');
       }
 
-      this.increaseProgress();
+      progressBar.increaseProgress();
 
     } else {
       console.log('Не валидно!')
@@ -350,8 +242,124 @@ class Quiz {
     return s
   }
 }
+/* ======= class Quiz END ======= */
 
-window.quiz = new Quiz('.quiz', '.quiz-wrapper', quizData, {
+/* ======= class ProgressBar START ======= */
+class ProgressBar {
+  constructor(target, options) {
+    this.target = target;
+    this.targetElem = document.querySelector(this.target);
+
+    (options.zeroStart === false || options.zeroStart === 0) ?
+      this.zeroStart = false :
+      this.zeroStart = true;
+
+    (options.smoothProgress === true || options.smoothProgress === 1 || options.smoothProgress === undefined) ?
+      this.smoothProgress = true :
+      this.smoothProgress = false;
+
+    (options.completeEnd === true || options.completeEnd === 1) ?
+      this.completeEnd = true :
+      this.completeEnd = false;
+
+    if (this.zeroStart === false) this.completeEnd = false;
+
+    // The number property from the last element of the array
+    this.completeEnd ? this.numberOfQuestions = quizData[quizData.length - 1].number - 1 : this.numberOfQuestions = quizData[quizData.length - 1].number;
+
+    // How many percent of the total number of questions is one question
+    this.percentOfOneQuestion = Math.ceil(100 / this.numberOfQuestions);
+    this.zeroStart ? this.value = 0 : this.value = this.percentOfOneQuestion;
+
+    this.init();
+  }
+
+  init() {
+    if (this.targetElem) {
+      const quizProgressBarHTML = `
+      <div class="quiz-progress-bar">
+        <div class="quiz-progress-bar__value">${this.value}%</div>
+        <div class="quiz-progress-bar__bar">
+          <div class="quiz-progress-bar__progress">
+            <span class="quiz-progress-bar__progress-value">${this.value}%</span>
+          </div>
+        </div>
+      </div>
+    `;
+
+      this.targetElem.insertAdjacentHTML('afterbegin', quizProgressBarHTML);
+
+      const $__quizProgressBarValue = this.targetElem.querySelector('.quiz-progress-bar__value');
+      $__quizProgressBarValue.textContent = this.value + '%';
+
+      const $__quizProgressBarProgress = this.targetElem.querySelector('.quiz-progress-bar__progress');
+      $__quizProgressBarProgress.style.width = `${this.value}%`;
+
+      const $__quizProgressBarProgressValue = this.targetElem.querySelector('.quiz-progress-bar__progress-value');
+      $__quizProgressBarProgressValue.textContent = this.value + '%';
+
+      console.log('class ProgressBar -> init() => init!');
+    } else {
+      console.log(`class ProgressBar -> init() => Couldn't find target element ${this.target}!`);
+      this.increaseProgress = () => { return };
+    }
+  }
+
+  increaseProgress() {
+    if (this.smoothProgress) {
+      if (this.value < 100) {
+        let value = this.value;
+        this.value += this.percentOfOneQuestion;
+
+        const interval = setInterval(smoothProgress.bind(this), 15);
+
+        function smoothProgress() {
+          if (value <= this.value && value <= 100) {
+            console.log(`class ProgressBar -> increaseProgress() => ${value}`);
+
+            const $__quizProgressBarValue = this.targetElem.querySelector('.quiz-progress-bar__value');
+            $__quizProgressBarValue.textContent = `${value}%`;
+
+            const $__quizProgressBarProgress = this.targetElem.querySelector('.quiz-progress-bar__progress');
+            $__quizProgressBarProgress.style.width = `${value}%`;
+
+            const $__quizProgressBarProgressValue = this.targetElem.querySelector('.quiz-progress-bar__progress-value');
+            $__quizProgressBarProgressValue.textContent = `${value}%`;
+
+            value++;
+          }
+        }
+      }
+      else {
+        return;
+      }
+    } else {
+      this.value += this.percentOfOneQuestion;
+
+      console.log(`class ProgressBar -> increaseProgress() => ${this.value}`);
+
+      const $__quizProgressBarValue = this.targetElem.querySelector('.quiz-progress-bar__value');
+      $__quizProgressBarValue.textContent = `${this.value}%`;
+
+      const $__quizProgressBarProgress = this.targetElem.querySelector('.quiz-progress-bar__progress');
+      $__quizProgressBarProgress.style.width = `${this.value}%`;
+
+      const $__quizProgressBarProgressValue = this.targetElem.querySelector('.quiz-progress-bar__progress-value');
+      $__quizProgressBarProgressValue.textContent = `${this.value}%`;
+    }
+  }
+}
+/* ======= class ProgressBar END ======= */
+
+/* ======= Instances of classes START ======= */
+window.quiz = new Quiz('.quiz', quizData, {
   nextBtnText: "Далее",
   sendBtnText: "Отправить",
-}, {});
+});
+
+const progressBar = new ProgressBar('.quiz-wrapper', { // Options:
+  // smoothProgress: false, // Makes progress smooth/sharp. DEFAULT VALUE = true
+  // zeroStart: false, // Sets the initial value to 0. DEFAULT VALUE = true
+  // completeEnd: true, // Every time completes progress at 100%. DEFAULT VALUE = false
+});
+/* ======= Instances of classes END ======= */
