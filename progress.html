@@ -78,11 +78,11 @@
             var elem = document.querySelector(".quiz-progress-bar__value");
             var elem2 = document.querySelector(".quiz-progress-bar__progress");
             var width = 10;
-            var id = setInterval(frame, 10);
+            var interval = setInterval(frame, 10);
 
             function frame() {
                 if (width >= 100) {
-                    clearInterval(id);
+                    clearInterval(interval);
                 } else {
 
                     // if ()
@@ -91,8 +91,9 @@
                     elem.innerHTML = width + "%";
                     elem2.style.width = width + "%";
                     console.log(width);
+                    clearInterval(interval);
 
-                // }
+                }
             }
             state = state + 1;
             
